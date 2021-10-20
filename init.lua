@@ -13,7 +13,7 @@ local hooks = require "core.hooks"
 -- this will run your config instead of the NvChad config for the given plugin
 
 -- hooks.override("lsp", "publish_diagnostics", function(current)
---   current.virtual_text = false;
+--   current.virtual_text = false;  
 --   return current;
 -- end)
 
@@ -25,6 +25,18 @@ hooks.add("setup_mappings", function(map)
     -- go
     vim.api.nvim_exec([[ autocmd BufWritePre *.go :silent! lua require('go.format').gofmt() ]], false)
     vim.api.nvim_exec([[ autocmd BufWritePre *.go :silent! lua require('go.format').goimport() ]], false)
+    vim.cmd("au BufReadPost *.gohtml set syntax=html")
+    vim.cmd("au BufReadPost *.gotmpl set syntax=html")
+    -- moving lines
+    vim.api.nvim_exec(
+    [[
+        nnoremap <A-k> :m .-2<CR>==
+		nnoremap <A-j> :m .+1<CR>==
+		inoremap <A-j> <Esc>:m .+1<CR>==gi
+		inoremap <A-k> <Esc>:m .-2<CR>==gi
+		vnoremap <A-j> :m '>+1<CR>gv=gv
+		vnoremap <A-k> :m '<-2<CR>gv=gv
+    ]] , false)
     -- tab
     vim.cmd("set tabstop=4")
     vim.cmd("set shiftwidth=4")
